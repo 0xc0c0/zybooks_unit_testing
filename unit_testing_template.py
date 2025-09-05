@@ -18,9 +18,23 @@ test_function_answers = {
     'sum_numbers': correct_sum_numbers
 }
 
-# If checking printing, set to True here
+# If you need to customize your output checking for a particular function or variable,
+#   modify this or create additional functions here
+# UPDATE FOR EACH PROBLEM (maybe)
+def default_output_checker(answer, student_stdout, feedback_output=None):
+    search_str = str(answer)
+    found_offset = search_str.lower() in student_stdout.lower()
+    success = (found_offset != -1)
+    if feedback_output:
+        feedback_output.write(f"{LOG_SUCCESS[success]} --> Expected to find {search_str} (case insensitive) in the output")
+    return success
+
+
+# Adding an output checker for a named function here will enable output checking for that function
 # UPDATE FOR EACH PROBLEM
-check_printing = True
+test_function_answer_formatters = {
+    'sum_numbers': default_output_checker
+}
 
 # Saved strings to build printouts in the testfeedback box
 LOG_SUCCESS = {
@@ -54,11 +68,6 @@ def handle_run_test_main(test_input):
     sys.stdin = stdin
 
     return student_main, stu_printed
-
-# If specifying a particular format string that should be printed, change it here
-# UPDATE FOR EACH PROBLEM (maybe)
-def output_formatter(answer):
-    return f"{answer}"
 
 def test_passed(test_feedback):
     # Should not need to update this function
